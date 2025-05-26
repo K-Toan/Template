@@ -1,0 +1,96 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.XR;
+
+public class PlayerController : MonoBehaviour, IDamageable
+{
+    [Header("Movement")]
+    public float MoveSpeed = 4.0f;
+    public float CurrentSpeed = 0.0f;
+    public float Acceleration = 4.0f;
+    public Vector2 MoveDir;
+    public Vector2 LastMoveDir;
+
+    [Header("Dash")]
+    public bool CanDash = true;
+    public float DashSpeed = 12.0f;
+    public float DashDuration = 0.22f;
+    public float DashCooldownDuration = 1.0f;
+
+    [Header("State")]
+    public PlayerStateMachine StateMachine;
+
+    [Header("Components")]
+    public Rigidbody2D Rb;
+    public PlayerInputSystem Input;
+
+    // private PlayerAnimationSystem _anim;
+    // private PlayerCombatSystem _combat;
+    // private PlayerInventorySystem _inventory;
+
+    private void Awake()
+    {
+        Rb = GetComponent<Rigidbody2D>();
+        Input = GetComponent<PlayerInputSystem>();
+
+        StateMachine = gameObject.AddComponent<PlayerStateMachine>();
+    }
+
+    private void Start()
+    {
+        StateMachine.Initialize(this);
+    }
+
+    private void Update()
+    {
+        MoveDir = Input.Move.normalized;
+
+        if (MoveDir != Vector2.zero)
+        {
+            LastMoveDir = MoveDir;
+        }
+
+        CurrentSpeed = Vector2.SqrMagnitude(Rb.linearVelocity);
+
+        StateMachine?.Update();
+    }
+
+    private void FixedUpdate()
+    {
+        StateMachine?.FixedUpdate();
+    }
+
+    public void Move()
+    {
+        // perform move
+        Rb.linearVelocity = Vector2.Lerp(Rb.linearVelocity, MoveDir * MoveSpeed, Acceleration);
+    }
+
+    public void Dash()
+    {
+        // perform dash
+        Rb.linearVelocity = LastMoveDir * DashSpeed;
+    }
+
+    #region Coroutine
+    public void StartDashCooldownCoroutine() => StartCoroutine(DashCooldownCoroutine());
+    private IEnumerator DashCooldownCoroutine()
+    {
+        CanDash = false;
+        yield return new WaitForSeconds(DashCooldownDuration);
+        CanDash = true;
+    }
+    #endregion
+
+    #region IDamageble
+    public void Die()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void TakeDamage(float amount)
+    {
+        throw new System.NotImplementedException();
+    }
+    #endregion
+}
