@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public float MoveSpeed = 4.0f;
     public float CurrentSpeed = 0.0f;
     public float Acceleration = 4.0f;
+    public float Deceleration = 6.0f;
     public Vector2 MoveDir;
     public Vector2 LastMoveDir;
 
@@ -61,10 +62,17 @@ public class PlayerController : MonoBehaviour, IDamageable
         StateMachine?.FixedUpdate();
     }
 
+    #region State
     public void Move()
     {
         // perform move
         Rb.linearVelocity = Vector2.Lerp(Rb.linearVelocity, MoveDir * MoveSpeed, Acceleration * Time.fixedDeltaTime);
+    }
+
+    public void StopMoving()
+    {
+        // perform move
+        Rb.linearVelocity = Vector2.Lerp(Rb.linearVelocity, Vector2.zero, Deceleration * Time.fixedDeltaTime);
     }
 
     public void Dash()
@@ -72,6 +80,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         // perform dash
         Rb.linearVelocity = DashDir * DashSpeed;
     }
+    #endregion
 
     #region Coroutine
     public void StartDashCooldownCoroutine() => StartCoroutine(DashCooldownCoroutine());

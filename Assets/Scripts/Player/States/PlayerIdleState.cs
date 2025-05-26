@@ -33,12 +33,11 @@ public class PlayerIdleState : PlayerBaseState
             // set state to run
             player.StateMachine.SetState(PlayerState.Run);
         }
-
-        // do nothing but stand still
-        player.Move();
     }
 
     public override void FixedUpdate()
     {
+        // do nothing but stand still
+        player.StopMoving();
     }
 }

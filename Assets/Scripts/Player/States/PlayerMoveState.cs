@@ -16,6 +16,10 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void Update()
     {
+        // primary fire
+
+        // secondary fire
+
         // dash
         if (player.Input.Dash && player.CanDash)
         {
@@ -28,12 +32,10 @@ public class PlayerMoveState : PlayerBaseState
         {
             player.StateMachine.SetState(PlayerState.Idle);
         }
-
-        player.Move();
     }
 
     public override void FixedUpdate()
     {
-
+        player.Move();
     }
 }
