@@ -14,7 +14,10 @@ public class PlayerDashState : PlayerBaseState
         // set timer
         _dashTime = player.DashDuration;
         player.StartDashCooldownCoroutine();
-        
+
+        // set dash direction
+        player.DashDir = player.LastMoveDir;
+
         // disable hurtbox
         // ...
     }

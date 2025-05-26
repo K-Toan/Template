@@ -576,6 +576,7 @@ MonoBehaviour:
   DashSpeed: 12
   DashDuration: 0.22
   DashCooldownDuration: 1
+  DashDir: {x: 0, y: 0}
   StateMachine: {fileID: 0}
   Rb: {fileID: 0}
   Input: {fileID: 0}

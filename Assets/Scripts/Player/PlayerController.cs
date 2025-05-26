@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public float DashSpeed = 12.0f;
     public float DashDuration = 0.22f;
     public float DashCooldownDuration = 1.0f;
+    public Vector2 DashDir;
 
     [Header("State")]
     public PlayerStateMachine StateMachine;
@@ -63,13 +64,13 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void Move()
     {
         // perform move
-        Rb.linearVelocity = Vector2.Lerp(Rb.linearVelocity, MoveDir * MoveSpeed, Acceleration);
+        Rb.linearVelocity = Vector2.Lerp(Rb.linearVelocity, MoveDir * MoveSpeed, Acceleration * Time.fixedDeltaTime);
     }
 
     public void Dash()
     {
         // perform dash
-        Rb.linearVelocity = LastMoveDir * DashSpeed;
+        Rb.linearVelocity = DashDir * DashSpeed;
     }
 
     #region Coroutine
