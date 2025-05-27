@@ -10,10 +10,8 @@ public abstract class EntityStateMachine<EState> : MonoBehaviour where EState : 
     protected Dictionary<EState, EntityBaseState<EState>> states = new Dictionary<EState, EntityBaseState<EState>>();
     // private bool isWaiting = false;
 
-    public virtual void SetState(EState key, float waitTimeInSeconds = 0.0f)
+    public virtual void SetState(EState key)
     {
-        StartCoroutine(Wait(waitTimeInSeconds));
-
         currentState?.Exit();
         currentState = states[key];
         currentState?.Enter();

@@ -33,6 +33,11 @@ public class PlayerIdleState : PlayerBaseState
             // set state to run
             pStateMachine.SetState(PlayerState.Run);
         }
+
+        // set animation
+        pAnimator.SetFloat(speedXHash, pController.LastMoveDir.x);
+        pAnimator.SetFloat(speedYHash, pController.LastMoveDir.y);
+        pAnimator.SetFloat(speedHash, pController.CurrentSpeed);
     }
 
     public override void FixedUpdate()

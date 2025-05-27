@@ -13,10 +13,13 @@ public class PlayerDashState : PlayerBaseState
     {
         // set timer
         _dashTime = pController.DashDuration;
-        pStateMachine.StartDashCooldownCoroutine();
 
         // set dash direction
+        pStateMachine.StartDashCooldownCoroutine();
         pController.DashDir = pController.LastMoveDir;
+
+        // set animation
+        pAnimator.SetTrigger(dashHash);
 
         // disable hurtbox
         // ...

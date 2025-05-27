@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour, IDamageable
 {
@@ -21,7 +19,6 @@ public class PlayerController : MonoBehaviour, IDamageable
     [Header("???")]
     public PlayerInputSystem Input;
     public PlayerStateMachine StateMachine;
-    public PlayerAnimationSystem AnimSystem;
 
     [Header("Components")]
     public Rigidbody2D Rb;
@@ -40,13 +37,11 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         Input = GetComponent<PlayerInputSystem>();
         StateMachine = gameObject.AddComponent<PlayerStateMachine>();
-        AnimSystem = gameObject.AddComponent<PlayerAnimationSystem>();
     }
 
     private void Start()
     {
         StateMachine.Initialize(this);
-        AnimSystem.Initialize(this);
     }
 
     private void Update()
@@ -61,7 +56,16 @@ public class PlayerController : MonoBehaviour, IDamageable
         CurrentSpeed = Rb.linearVelocity.magnitude / MoveSpeed;
 
         StateMachine?.Update();
-        AnimSystem?.Update();
+
+        HandleFlipX();
+    }
+
+    protected void HandleFlipX()
+    {
+        if (Input.Move.x > 0)
+            SprtRenderer.flipX = false;
+        else if (Input.Move.x < 0)
+            SprtRenderer.flipX = true;
     }
 
     private void FixedUpdate()

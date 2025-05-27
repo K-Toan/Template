@@ -30,8 +30,14 @@ public class PlayerMoveState : PlayerBaseState
         // stop moving
         if (pController.MoveDir == Vector2.zero)
         {
+            // set state to idle
             pStateMachine.SetState(PlayerState.Idle);
         }
+
+        // set animation
+        pAnimator.SetFloat(speedXHash, pController.LastMoveDir.x);
+        pAnimator.SetFloat(speedYHash, pController.LastMoveDir.y);
+        pAnimator.SetFloat(speedHash, pController.CurrentSpeed);
     }
 
     public override void FixedUpdate()
