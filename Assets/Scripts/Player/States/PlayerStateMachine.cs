@@ -1,19 +1,22 @@
+using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerStateMachine : EntityStateMachine<PlayerState>
 {
-    protected PlayerController player;
+    public bool CanDash = true;
+    protected PlayerController pController;
 
-    public void Initialize(PlayerController player)
+    public void Initialize(PlayerController playerController)
     {
-        this.player = player;
+        pController = playerController;
 
         states = new Dictionary<PlayerState, EntityBaseState<PlayerState>>
         {
-            { PlayerState.Idle, new PlayerIdleState(player) },
-            { PlayerState.Run, new PlayerMoveState(player) },
-            { PlayerState.Dash, new PlayerDashState(player) },
-            { PlayerState.Attack, new PlayerAttackState(player) },
+            { PlayerState.Idle, new PlayerIdleState(pController) },
+            { PlayerState.Run, new PlayerMoveState(pController) },
+            { PlayerState.Dash, new PlayerDashState(pController) },
+            { PlayerState.Attack, new PlayerAttackState(pController) },
         };
 
         SetDefaultState();
@@ -22,5 +25,17 @@ public class PlayerStateMachine : EntityStateMachine<PlayerState>
     public void SetDefaultState()
     {
         SetState(PlayerState.Idle);
+    }
+
+    public void StartDashCooldownCoroutine()
+    {
+        StartCoroutine(DashCooldownCoroutine());
+
+        IEnumerator DashCooldownCoroutine()
+        {
+            CanDash = false;
+            yield return new WaitForSeconds(1.0f);
+            CanDash = true;
+        }
     }
 }

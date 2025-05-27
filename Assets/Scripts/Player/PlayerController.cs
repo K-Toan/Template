@@ -1,6 +1,6 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.XR;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour, IDamageable
 {
@@ -13,20 +13,20 @@ public class PlayerController : MonoBehaviour, IDamageable
     public Vector2 LastMoveDir;
 
     [Header("Dash")]
-    public bool CanDash = true;
     public float DashSpeed = 12.0f;
     public float DashDuration = 0.22f;
     public float DashCooldownDuration = 1.0f;
     public Vector2 DashDir;
 
     [Header("???")]
+    public PlayerInputSystem Input;
     public PlayerStateMachine StateMachine;
     public PlayerAnimationSystem AnimSystem;
-    public PlayerInputSystem Input;
 
     [Header("Components")]
     public Rigidbody2D Rb;
     public Animator Anim;
+    public SpriteRenderer SprtRenderer;
 
     // private PlayerAnimationSystem _anim;
     // private PlayerCombatSystem _combat;
@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         Rb = GetComponent<Rigidbody2D>();
         Anim = GetComponent<Animator>();
+        SprtRenderer = GetComponent<SpriteRenderer>();
 
         Input = GetComponent<PlayerInputSystem>();
         StateMachine = gameObject.AddComponent<PlayerStateMachine>();
@@ -45,6 +46,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     private void Start()
     {
         StateMachine.Initialize(this);
+        AnimSystem.Initialize(this);
     }
 
     private void Update()
@@ -56,9 +58,10 @@ public class PlayerController : MonoBehaviour, IDamageable
             LastMoveDir = MoveDir;
         }
 
-        CurrentSpeed = Vector2.SqrMagnitude(Rb.linearVelocity);
+        CurrentSpeed = Rb.linearVelocity.magnitude / MoveSpeed;
 
         StateMachine?.Update();
+        AnimSystem?.Update();
     }
 
     private void FixedUpdate()
@@ -83,16 +86,6 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         // perform dash
         Rb.linearVelocity = DashDir * DashSpeed;
-    }
-    #endregion
-
-    #region Coroutine
-    public void StartDashCooldownCoroutine() => StartCoroutine(DashCooldownCoroutine());
-    private IEnumerator DashCooldownCoroutine()
-    {
-        CanDash = false;
-        yield return new WaitForSeconds(DashCooldownDuration);
-        CanDash = true;
     }
     #endregion
 

@@ -368,6 +368,7 @@ GameObject:
   - component: {fileID: 1666625594}
   - component: {fileID: 1666625593}
   - component: {fileID: 1666625596}
+  - component: {fileID: 1666625599}
   - component: {fileID: 1666625595}
   - component: {fileID: 1666625597}
   - component: {fileID: 1666625598}
@@ -570,6 +571,7 @@ MonoBehaviour:
   MoveSpeed: 4
   CurrentSpeed: 0
   Acceleration: 4
+  Deceleration: 6
   MoveDir: {x: 0, y: 0}
   LastMoveDir: {x: 0, y: 0}
   CanDash: 1
@@ -578,8 +580,33 @@ MonoBehaviour:
   DashCooldownDuration: 1
   DashDir: {x: 0, y: 0}
   StateMachine: {fileID: 0}
-  Rb: {fileID: 0}
+  AnimSystem: {fileID: 0}
   Input: {fileID: 0}
+  Rb: {fileID: 0}
+  Anim: {fileID: 0}
+  SprtRenderer: {fileID: 0}
+--- !u!95 &1666625599
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666625592}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bcecfdd5dc7246194b26c7e7ea4529b2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

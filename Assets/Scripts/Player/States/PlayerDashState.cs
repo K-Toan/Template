@@ -13,7 +13,7 @@ public class PlayerDashState : PlayerBaseState
     {
         // set timer
         _dashTime = pController.DashDuration;
-        pController.StartDashCooldownCoroutine();
+        pStateMachine.StartDashCooldownCoroutine();
 
         // set dash direction
         pController.DashDir = pController.LastMoveDir;
@@ -48,9 +48,6 @@ public class PlayerDashState : PlayerBaseState
 
     public override void FixedUpdate()
     {
-        if (_dashTime > 0.0f)
-        {
-            pController.Dash();
-        }
+        pController.Dash();
     }
 }

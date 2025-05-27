@@ -21,7 +21,7 @@ public class PlayerMoveState : PlayerBaseState
         // secondary fire
 
         // dash
-        if (pInput.Dash && pController.CanDash)
+        if (pInput.Dash && pStateMachine.CanDash)
         {
             // set state
             pStateMachine.SetState(PlayerState.Dash);
