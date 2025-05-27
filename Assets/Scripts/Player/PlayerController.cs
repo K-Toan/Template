@@ -19,12 +19,14 @@ public class PlayerController : MonoBehaviour, IDamageable
     public float DashCooldownDuration = 1.0f;
     public Vector2 DashDir;
 
-    [Header("State")]
+    [Header("???")]
     public PlayerStateMachine StateMachine;
+    public PlayerAnimationSystem AnimSystem;
+    public PlayerInputSystem Input;
 
     [Header("Components")]
     public Rigidbody2D Rb;
-    public PlayerInputSystem Input;
+    public Animator Anim;
 
     // private PlayerAnimationSystem _anim;
     // private PlayerCombatSystem _combat;
@@ -33,9 +35,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     private void Awake()
     {
         Rb = GetComponent<Rigidbody2D>();
-        Input = GetComponent<PlayerInputSystem>();
+        Anim = GetComponent<Animator>();
 
+        Input = GetComponent<PlayerInputSystem>();
         StateMachine = gameObject.AddComponent<PlayerStateMachine>();
+        AnimSystem = gameObject.AddComponent<PlayerAnimationSystem>();
     }
 
     private void Start()

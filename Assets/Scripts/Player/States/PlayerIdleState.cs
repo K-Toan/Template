@@ -21,23 +21,23 @@ public class PlayerIdleState : PlayerBaseState
         // secondary fire
 
         // dash
-        if (player.Input.Dash && player.CanDash)
+        if (pInput.Dash && pController.CanDash)
         {
             // set state
-            player.StateMachine.SetState(PlayerState.Dash);
+            pStateMachine.SetState(PlayerState.Dash);
         }
 
         // move
-        if (player.MoveDir != Vector2.zero)
+        if (pController.MoveDir != Vector2.zero)
         {
             // set state to run
-            player.StateMachine.SetState(PlayerState.Run);
+            pStateMachine.SetState(PlayerState.Run);
         }
     }
 
     public override void FixedUpdate()
     {
         // do nothing but stand still
-        player.StopMoving();
+        pController.StopMoving();
     }
 }

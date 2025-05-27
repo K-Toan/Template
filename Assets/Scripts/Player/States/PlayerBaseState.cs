@@ -1,9 +1,14 @@
 public abstract class PlayerBaseState : EntityBaseState<PlayerState>
 {
-    protected PlayerController player;
+    protected PlayerController pController;
+    protected PlayerInputSystem pInput;
+    protected PlayerStateMachine pStateMachine;
 
-    public PlayerBaseState(PlayerController player)
+    public PlayerBaseState(PlayerController playerController)
     {
-        this.player = player;
+        pController = playerController;
+
+        pInput = pController.Input;
+        pStateMachine = pController.StateMachine;
     }
 }

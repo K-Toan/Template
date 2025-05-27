@@ -11,7 +11,6 @@ public abstract class EntityStateMachine<EState> : MonoBehaviour where EState : 
     {
         currentState?.Exit();
         currentState = states[key];
-        Logger.LogInfo(key.ToString());
         currentState?.Enter();
     }
 

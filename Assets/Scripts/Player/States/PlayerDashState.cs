@@ -12,11 +12,11 @@ public class PlayerDashState : PlayerBaseState
     public override void Enter()
     {
         // set timer
-        _dashTime = player.DashDuration;
-        player.StartDashCooldownCoroutine();
+        _dashTime = pController.DashDuration;
+        pController.StartDashCooldownCoroutine();
 
         // set dash direction
-        player.DashDir = player.LastMoveDir;
+        pController.DashDir = pController.LastMoveDir;
 
         // disable hurtbox
         // ...
@@ -42,7 +42,7 @@ public class PlayerDashState : PlayerBaseState
             _dashTime = 0.0f;
 
             // reset state
-            player.StateMachine.SetState(PlayerState.Idle);
+            pStateMachine.SetState(PlayerState.Idle);
         }
     }
 
@@ -50,7 +50,7 @@ public class PlayerDashState : PlayerBaseState
     {
         if (_dashTime > 0.0f)
         {
-            player.Dash();
+            pController.Dash();
         }
     }
 }
