@@ -371,7 +371,8 @@ GameObject:
   - component: {fileID: 1666625599}
   - component: {fileID: 1666625595}
   - component: {fileID: 1666625597}
-  - component: {fileID: 1666625598}
+  - component: {fileID: 1666625601}
+  - component: {fileID: 1666625600}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -556,35 +557,6 @@ MonoBehaviour:
   Dodge: 0
   Move: {x: 0, y: 0}
   MousePosition: {x: 0, y: 0}
---- !u!114 &1666625598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1666625592}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8273244e3c92b472bb641aaf1b6f362, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MoveSpeed: 4
-  CurrentSpeed: 0
-  Acceleration: 4
-  Deceleration: 6
-  MoveDir: {x: 0, y: 0}
-  LastMoveDir: {x: 0, y: 0}
-  CanDash: 1
-  DashSpeed: 12
-  DashDuration: 0.22
-  DashCooldownDuration: 1
-  DashDir: {x: 0, y: 0}
-  StateMachine: {fileID: 0}
-  AnimSystem: {fileID: 0}
-  Input: {fileID: 0}
-  Rb: {fileID: 0}
-  Anim: {fileID: 0}
-  SprtRenderer: {fileID: 0}
 --- !u!95 &1666625599
 Animator:
   serializedVersion: 7
@@ -607,6 +579,52 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1666625600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666625592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d39412c19617d179b0bc9fcfc66e6eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HasAnimator: 0
+  Rb: {fileID: 0}
+  Animator: {fileID: 0}
+  SpriteRenderer: {fileID: 0}
+  Stats: {fileID: 0}
+  Input: {fileID: 0}
+--- !u!114 &1666625601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666625592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48fd634fa333ae44aa0f18f811e84b3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHP: 10
+  MoveSpeed: 4
+  Acceleration: 4
+  Deceleration: 6
+  DashSpeed: 12
+  DashDuration: 0.12
+  DashCooldownDuration: 2
+  CurrentHP: 10
+  CanMove: 1
+  CurrentSpeed: 0
+  MoveDir: {x: 0, y: 0}
+  LastMoveDir: {x: 0, y: 0}
+  CanDash: 1
+  DashCooldownDurationLeft: 0
+  DashDir: {x: 0, y: 0}
+  CanAttack: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

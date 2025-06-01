@@ -1,56 +1,66 @@
-using System.Collections;
 using UnityEngine;
 
-public class PlayerDashState : PlayerBaseState
+namespace Template.Characters.Player
 {
-    private float _dashTime = 0.0f;
-
-    public PlayerDashState(PlayerController player) : base(player)
+    public class PlayerDashState : PlayerBaseState
     {
-    }
+        protected float dashDuration;
+        protected float dashSpeed;
+        protected Vector2 dashDir;
+        protected int speedHash;
+        protected int speedXHash;
+        protected int speedYHash;
 
-    public override void Enter()
-    {
-        // set timer
-        _dashTime = pController.DashDuration;
-
-        // set dash direction
-        pStateMachine.StartDashCooldownCoroutine();
-        pController.DashDir = pController.LastMoveDir;
-
-        // set animation
-        pAnimator.SetTrigger(dashHash);
-
-        // disable hurtbox
-        // ...
-    }
-
-    public override void Exit()
-    {
-        // enable hurtbox
-        // ...
-    }
-
-    public override void Update()
-    {
-        // perform dash
-        if (_dashTime > 0.0f)
+        public PlayerDashState(PlayerStateMachine stateMachine, PlayerStateFactory stateFactory) : base(stateMachine, stateFactory)
         {
-            _dashTime -= Time.deltaTime;
+            speedHash = Animator.StringToHash("CurrentSpeed");
+            speedXHash = Animator.StringToHash("SpeedX");
+            speedYHash = Animator.StringToHash("SpeedY");
         }
-        // set state to idle
-        else
+
+        public override void Enter()
         {
-            // reset dash time
-            _dashTime = 0.0f;
+            // Initialize Dash state
+            Logger.LogInfo("Entering Dash State");
 
-            // reset state
-            pStateMachine.SetState(PlayerState.Idle);
+            stateMachine.Animator.Play("Dash");
         }
-    }
 
-    public override void FixedUpdate()
-    {
-        pController.Dash();
+        public override void Exit()
+        {
+            // Cleanup Dash state
+            Logger.LogInfo("Exiting Dash State");
+        }
+
+        public override void LogicUpdate()
+        {
+            // Handle logic for Dash state
+            
+        }
+
+        public override void PhysicUpdate()
+        {
+            // Handle physics for Dash state
+            // Perform dash 
+
+        }
+
+        public override void AnimationUpdate()
+        {
+            // Handle animation for Dash state
+            // stateMachine.Animator.SetFloat(speedHash, 0);
+            // stateMachine.Animator.SetFloat(speedXHash, stateMachine.Stats.LastMoveDir.x);
+            // stateMachine.Animator.SetFloat(speedYHash, stateMachine.Stats.LastMoveDir.y);
+        }
+
+        public override void CheckSwitchState()
+        {
+            // Check conditions to switch from Dash state
+
+            if (stateMachine.Input.Dash && stateMachine.Stats.CanDash && stateMachine.Stats.DashCooldownDurationLeft <= 0.0f)
+            {
+                stateMachine.SwitchState(stateFactory.Dash);
+            }
+        }
     }
 }

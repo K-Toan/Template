@@ -1,47 +1,93 @@
 using UnityEngine;
 
-public class PlayerMoveState : PlayerBaseState
+namespace Template.Characters.Player
 {
-    public PlayerMoveState(PlayerController player) : base(player)
+    public class PlayerMoveState : PlayerBaseState
     {
-    }
+        protected float moveSpeed;
+        protected float currentSpeed;
+        protected float acceleration;
+        protected float deceleration;
+        protected Vector2 moveDirection;
+        protected Vector2 lastMoveDirection;
+        protected int speedHash;
+        protected int speedXHash;
+        protected int speedYHash;
 
-    public override void Enter()
-    {
-    }
-
-    public override void Exit()
-    {
-    }
-
-    public override void Update()
-    {
-        // primary fire
-
-        // secondary fire
-
-        // dash
-        if (pInput.Dash && pStateMachine.CanDash)
+        public PlayerMoveState(PlayerStateMachine stateMachine, PlayerStateFactory stateFactory) : base(stateMachine, stateFactory)
         {
-            // set state
-            pStateMachine.SetState(PlayerState.Dash);
+            speedHash = Animator.StringToHash("CurrentSpeed");
+            speedXHash = Animator.StringToHash("SpeedX");
+            speedYHash = Animator.StringToHash("SpeedY");
         }
 
-        // stop moving
-        if (pController.MoveDir == Vector2.zero)
+        public override void Enter()
         {
-            // set state to idle
-            pStateMachine.SetState(PlayerState.Idle);
+            // Initialize move state
+            Logger.LogInfo("Entering Move State");
+
+            moveSpeed = stateMachine.Stats.MoveSpeed;
+            acceleration = stateMachine.Stats.Acceleration;
+            deceleration = stateMachine.Stats.Deceleration;
         }
 
-        // set animation
-        pAnimator.SetFloat(speedXHash, pController.LastMoveDir.x);
-        pAnimator.SetFloat(speedYHash, pController.LastMoveDir.y);
-        pAnimator.SetFloat(speedHash, pController.CurrentSpeed);
-    }
+        public override void Exit()
+        {
+            // Cleanup move state
+            Logger.LogInfo("Exiting Move State");
+        }
 
-    public override void FixedUpdate()
-    {
-        pController.Move();
+        public override void LogicUpdate()
+        {
+            // Handle logic for move state
+            moveDirection = stateMachine.Input.Move.normalized;
+
+            if (moveDirection != Vector2.zero)
+                lastMoveDirection = moveDirection;
+
+            currentSpeed = stateMachine.Rb.linearVelocity.magnitude / moveSpeed;
+        }
+
+        public override void PhysicUpdate()
+        {
+            // Handle physics for move state
+            float mult = acceleration;
+
+            // Apply movement based 
+            if (moveDirection == Vector2.zero)
+                mult = deceleration;
+            
+            stateMachine.Rb.linearVelocity = Vector2.Lerp(
+                stateMachine.Rb.linearVelocity,
+                moveDirection * moveSpeed,
+                mult * Time.fixedDeltaTime
+            );
+        }
+
+        public override void AnimationUpdate()
+        {
+            // Set animation based on speed
+            if(currentSpeed <= 0.1f)
+                stateMachine.Animator.Play("Idle");
+            else if(currentSpeed >= 0.1f && currentSpeed < 0.4f)
+                stateMachine.Animator.Play("Walk");
+            else
+                stateMachine.Animator.Play("Run");
+
+            // Handle animation for move state
+            stateMachine.Animator.SetFloat(speedHash, currentSpeed);
+            stateMachine.Animator.SetFloat(speedXHash, lastMoveDirection.x);
+            stateMachine.Animator.SetFloat(speedYHash, lastMoveDirection.y);
+        }
+
+        public override void CheckSwitchState()
+        {
+            // Check conditions to switch from move state
+
+            if (stateMachine.Input.Dash && stateMachine.Stats.CanDash && stateMachine.Stats.DashCooldownDurationLeft <= 0.0f)
+            {
+                stateMachine.SwitchState(stateFactory.Dash);
+            }
+        }
     }
 }
