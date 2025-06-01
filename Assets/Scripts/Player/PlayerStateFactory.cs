@@ -12,6 +12,7 @@ namespace Template.Characters.Player
         }
 
         public PlayerBaseState Default() => Move;
+        public PlayerBaseState Exit() => Move;
         public PlayerBaseState Move => new PlayerMoveState(_stateMachine, this);
         public PlayerBaseState Dash => new PlayerDashState(_stateMachine, this);
     }

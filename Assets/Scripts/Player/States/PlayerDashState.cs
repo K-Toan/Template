@@ -4,8 +4,9 @@ namespace Template.Characters.Player
 {
     public class PlayerDashState : PlayerBaseState
     {
-        protected float dashDuration;
         protected float dashSpeed;
+        protected float dashDuration;
+        protected float endDashDuration;
         protected Vector2 dashDir;
         protected int speedHash;
         protected int speedXHash;
@@ -13,7 +14,6 @@ namespace Template.Characters.Player
 
         public PlayerDashState(PlayerStateMachine stateMachine, PlayerStateFactory stateFactory) : base(stateMachine, stateFactory)
         {
-            speedHash = Animator.StringToHash("CurrentSpeed");
             speedXHash = Animator.StringToHash("SpeedX");
             speedYHash = Animator.StringToHash("SpeedY");
         }
@@ -22,8 +22,17 @@ namespace Template.Characters.Player
         {
             // Initialize Dash state
             Logger.LogInfo("Entering Dash State");
+            dashSpeed = stateMachine.Stats.DashSpeed;
+            dashDuration = stateMachine.Stats.DashDuration;
 
-            stateMachine.Animator.Play("Dash");
+            dashDir = stateMachine.Input.Move.normalized;
+            if (dashDir == Vector2.zero)
+            {
+                Logger.LogInfo("djawhuildjlawdwailj");
+            }
+
+            // Start cooldown
+            stateMachine.Stats.StartDashCooldown();
         }
 
         public override void Exit()
@@ -35,31 +44,31 @@ namespace Template.Characters.Player
         public override void LogicUpdate()
         {
             // Handle logic for Dash state
-            
+            dashDuration -= Time.deltaTime;
         }
 
         public override void PhysicUpdate()
         {
             // Handle physics for Dash state
             // Perform dash 
-
+            stateMachine.Rb.linearVelocity = dashDir * dashSpeed;
         }
 
         public override void AnimationUpdate()
         {
             // Handle animation for Dash state
-            // stateMachine.Animator.SetFloat(speedHash, 0);
-            // stateMachine.Animator.SetFloat(speedXHash, stateMachine.Stats.LastMoveDir.x);
-            // stateMachine.Animator.SetFloat(speedYHash, stateMachine.Stats.LastMoveDir.y);
+            stateMachine.Animator.Play("Dash");
+            stateMachine.Animator.SetFloat(speedXHash, dashDir.x);
+            stateMachine.Animator.SetFloat(speedYHash, dashDir.y);
         }
 
         public override void CheckSwitchState()
         {
-            // Check conditions to switch from Dash state
-
-            if (stateMachine.Input.Dash && stateMachine.Stats.CanDash && stateMachine.Stats.DashCooldownDurationLeft <= 0.0f)
+            // Check conditions to switch from dash state
+            if (dashDuration <= 0)
             {
-                stateMachine.SwitchState(stateFactory.Dash);
+                // Switch to Move state after dash duration ends
+                stateMachine.SwitchState(stateFactory.Move);
             }
         }
     }

@@ -14,12 +14,12 @@ namespace Template.Characters.Player
         public SpriteRenderer SpriteRenderer;
 
         [Header("Scritps")]
-        public PlayerStats Stats;
+        public PlayerStatsSystem Stats;
         public PlayerInputSystem Input;
 
         [Header("State")]
         private PlayerStateFactory _stateFactory;
-        [SerializeField] private PlayerBaseState _currentState;
+        private PlayerBaseState _currentState;
 
         public void Awake()
         {
@@ -28,7 +28,7 @@ namespace Template.Characters.Player
             SpriteRenderer = GetComponent<SpriteRenderer>();
             HasAnimator = TryGetComponent<Animator>(out Animator);
 
-            Stats = GetComponent<PlayerStats>();
+            Stats = GetComponent<PlayerStatsSystem>();
             Input = GetComponent<PlayerInputSystem>();
 
             // Initialize state
@@ -44,9 +44,11 @@ namespace Template.Characters.Player
 
         private void Update()
         {
+            _currentState.CheckSwitchState();
+
             _currentState.LogicUpdate();
             _currentState.AnimationUpdate();
-
+            
             HandleFlipX();
         }
 
@@ -76,11 +78,11 @@ namespace Template.Characters.Player
 
         private void HandleFlipX()
         {
-            if (Input.Move.x < 0)
+            if (Rb.linearVelocityX < 0)
             {
                 SpriteRenderer.flipX = true;
             }
-            else if (Input.Move.x > 0)
+            else if (Rb.linearVelocityX > 0)
             {
                 SpriteRenderer.flipX = false;
             }

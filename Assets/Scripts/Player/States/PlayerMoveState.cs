@@ -26,9 +26,13 @@ namespace Template.Characters.Player
             // Initialize move state
             Logger.LogInfo("Entering Move State");
 
+            // Set initial values
             moveSpeed = stateMachine.Stats.MoveSpeed;
             acceleration = stateMachine.Stats.Acceleration;
             deceleration = stateMachine.Stats.Deceleration;
+
+            // Disable hurtbox
+            // ...
         }
 
         public override void Exit()
@@ -84,7 +88,7 @@ namespace Template.Characters.Player
         {
             // Check conditions to switch from move state
 
-            if (stateMachine.Input.Dash && stateMachine.Stats.CanDash && stateMachine.Stats.DashCooldownDurationLeft <= 0.0f)
+            if (stateMachine.Input.Dash && stateMachine.Stats.CanDash)
             {
                 stateMachine.SwitchState(stateFactory.Dash);
             }
