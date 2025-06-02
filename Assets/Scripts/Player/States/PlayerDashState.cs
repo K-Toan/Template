@@ -6,7 +6,6 @@ namespace Template.Characters.Player
     {
         protected float dashSpeed;
         protected float dashDuration;
-        protected float endDashDuration;
         protected Vector2 dashDir;
         protected int speedHash;
         protected int speedXHash;
@@ -24,12 +23,12 @@ namespace Template.Characters.Player
             Logger.LogInfo("Entering Dash State");
             dashSpeed = stateMachine.Stats.DashSpeed;
             dashDuration = stateMachine.Stats.DashDuration;
+            dashDir = stateMachine.Stats.FaceDirection;
 
-            dashDir = stateMachine.Input.Move.normalized;
-            if (dashDir == Vector2.zero)
-            {
-                Logger.LogInfo("djawhuildjlawdwailj");
-            }
+            // if (dashDir == Vector2.zero)
+            // {
+            //     Logger.LogInfo("Dash direction equals vector2 zero.");
+            // }
 
             // Start cooldown
             stateMachine.Stats.StartDashCooldown();
@@ -39,6 +38,7 @@ namespace Template.Characters.Player
         {
             // Cleanup Dash state
             Logger.LogInfo("Exiting Dash State");
+            stateMachine.Rb.linearVelocity = Vector2.zero;
         }
 
         public override void LogicUpdate()
@@ -68,6 +68,7 @@ namespace Template.Characters.Player
             if (dashDuration <= 0)
             {
                 // Switch to Move state after dash duration ends
+                // stateMachine.SwitchState(stateFactory.EndDash);
                 stateMachine.SwitchState(stateFactory.Move);
             }
         }

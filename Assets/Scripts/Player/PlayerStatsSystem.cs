@@ -24,13 +24,12 @@ namespace Template.Characters.Player
         public bool CanMove = true;
         // Dash
         public bool CanDash = true;
-        public Vector2 DashDir;
+        public Vector2 FaceDirection;
         // Attack
         public bool CanAttack = true;
 
         private void Update()
         {
-
         }
 
         public void StartDashCooldown() => StartCoroutine(DashCooldownCoroutine());

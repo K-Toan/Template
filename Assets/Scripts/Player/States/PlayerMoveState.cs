@@ -90,6 +90,7 @@ namespace Template.Characters.Player
 
             if (stateMachine.Input.Dash && stateMachine.Stats.CanDash)
             {
+                stateMachine.Stats.FaceDirection = lastMoveDirection;
                 stateMachine.SwitchState(stateFactory.Dash);
             }
         }
